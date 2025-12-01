@@ -1,7 +1,8 @@
-import {loadConfig} from "./misc/config.js";
-import {startBot} from "./discord/bot.js";
-import {loadLogger} from "./misc/logger.js";
-import {transferUserDataFromOldUsersJson} from "./valorant/auth.js";
+import { loadConfig } from "./misc/config.js";
+import { startBot } from "./discord/bot.js";
+import { loadLogger } from "./misc/logger.js";
+import { transferUserDataFromOldUsersJson } from "./valorant/auth.js";
+import express from "express";
 
 /* TODO list:
  * (done) Balance
@@ -23,3 +24,17 @@ if(config) {
     transferUserDataFromOldUsersJson();
     startBot();
 }
+
+// --- KEEP-ALIVE PING SERVER ---
+const app = express();
+
+// Simple route for uptime monitoring
+app.get("/", (req, res) => {
+    res.send("Bot is alive!");
+});
+
+// Listen on Railway's assigned port
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Ping server running on port ${PORT}`);
+});
